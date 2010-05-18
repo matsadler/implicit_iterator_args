@@ -9,25 +9,10 @@ Allows you to use _ to retrieve the arguments to a block, eg:
   [1, 2, 3].each {print _}      # prints '123'
   [1, 2, 3].inject(4) {_ + _}   # => 10
 
-This is only really a proof of concept, while the above works, anything more involved is likely to have problems.
+However this is quite a hack, and isn't recommended for actual use.
+
+Known bugs:
+Trying to access the argument with _ from another thread fails, eg:
+
+  [1, 2, 3].each {Thread.new {print _}.join}   # prints 'nilnilnil'
   
-  array1 = [1, 2, 3]
-  array2 = ["a", "b", "c"]
-  
-  array1.each do
-    print _
-    array2.each do
-      print _
-    end
-  end
-  
-  # prints '1abc2abc3abc'
-  
-  array1.each do
-    array2.each do
-      print _
-    end
-    print _
-  end
-  
-  # prints 'abcnilabcnilabcnil'
